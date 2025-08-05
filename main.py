@@ -1,9 +1,8 @@
-"""projekt_1.py: první projekt do Engeto Online Python Akademie
-
+import time
+"""project_1.py: The first Engeto Online Python Akademie Project
 author: Petra Jancarova
 email: p.jancarova@gmail.com
 """
-
 TEXTS = [
     '''Situated about 10 miles west of Kemmerer,
     Fossil Butte is a ruggedly impressive
@@ -32,86 +31,81 @@ TEXTS = [
     garpike and stingray are also present.'''
 ]
 
-finalnitext = "-------------------------------------------"
-import time
+underln = "-------------------------------------------"
 regusers = {'bob':'123', 'ann':'pass123', 'mike':'password123', 'liz':'pass123'}
-#vstup zalogovani se
+#login entrance
 username = input("username:")
-for login, heslo in regusers.items():
-    if username == login: 
-        heslovicko = input("password:")
-        print(finalnitext)
-        if heslovicko == heslo:
-            #vybrat mezi 3 texty v promenne
-            introd = f"Welcome to the app, {username}" + "\n" + "We have 3 texts to be analyzed.\n"+ finalnitext
+for login, definpw in regusers.items():
+    if username == login:
+        passwd = input("password:")
+        print(underln)
+        if passwd == definpw:
+            #pick up one of the three texts to be analyzed
+            introd = f"Welcome to the app, {username}" + "\n" + "We have 3 texts to be analyzed.\n"+ underln
             print(introd)
             txtchoice = input("Enter a number btw. 1 and 3 to select: ")
+            listnumbs = []
             if txtchoice.isdigit():
-                print(finalnitext)
+                print(underln)
                 txtchoice = int(txtchoice)
-                if txtchoice in range(1, 4):
-                    #dat promennou pro ty 3 ciselny moznosti
+                analys = txtchoice in range(1, 4)
+                if analys:
+                    #choose the specific number of it 1-3
                     if txtchoice == 1:
                         TEXTIND = TEXTS[0]
                     elif txtchoice == 2:
                         TEXTIND = TEXTS[1]
                     elif txtchoice == 3:
                         TEXTIND = TEXTS[2]
-                    #spocitani poctu slov
-                    slova = TEXTIND.split()
-                    pocetslov = len(slova)
-                    print(f"There are {pocetslov} words in the selected text.")
-                    #pocitani SLOV (ne zvlast pismen) co jenom zacinaj velkym..
-                    pocetcap = 0
-                    for slovo in TEXTIND.split():
-                        if slovo[0].isupper() and slovo[1].islower():
-                            pocetcap += 1
-                    print(f"There are {pocetcap} titlecase words.")
-                    #pocitani slov co jsou CELE z velkych pismen..
-                    pocetupper = 0
-                    for slovo in TEXTIND.split():
-                        if slovo[0].isupper() and slovo[1].isupper():
-                            pocetupper += 1
-                    print(f"There are {pocetupper} uppercase words.")
-                    #pocitani slov co jsou CELE z malych pismen
-                    pocetlower = 0
-                    for slovo in TEXTIND.split():
-                        if slovo.islower():
-                            pocetlower += 1
-                    print(f"There are {pocetlower} lowercase words.")
-                    #pocitani slov co jsou cisla..
-                    pocetcisel = 0
-                    for cislo in TEXTIND.split():
-                        if cislo.isnumeric():
-                            pocetcisel += 1
-                    print(f"There are {pocetcisel} numeric strings.")
-                    #soucet tech cisel...
-                    hodnotacisel = 0
-                    listcisla = []
-                    for cislo in TEXTIND.split():
-                        if cislo.isnumeric():
-                            listcisla.append(int(cislo))     
-                    print("The sum of all the numbers ", sum(listcisla), "\n", finalnitext, "\n", "LEN|      OCCURENCES      |NR.", "\n", finalnitext)
+                    #wordcutting
+                    textdivision = TEXTIND.split()
+                    #wordcounting of all words is the same as the length of the .split() method so counting it with it
+                    wdamount = len(textdivision)
+                    print(f"There are {wdamount} words in the selected text.")
 
-                    #graf pro soucet pismen ve slovech
-                    vypis = []
-                    for slova in TEXTIND.split():
-                        vypis.append(len(slova))
-                    for cisl in set(vypis):
-                        print(f"{cisl:>2}| {"*"*vypis.count(cisl):25}|{str(vypis.count(cisl)).lstrip()}")
-                    time.sleep(60)
+                    titlelt, upperlt, lowerlt, numberamount = 0, 0, 0, 0
+                    for singlew in textdivision:
+                    #wordcounting only the title words
+                        if len(singlew) >= 2 and singlew[0].isupper() and singlew[1].islower():
+                            titlelt += 1
+                    #wordcounting the whole-capital words
+                        if singlew.isupper():
+                            upperlt += 1
+                    #wordcounting lower words
+                        if singlew.islower():
+                            lowerlt += 1
+                    #wordcounting numbers within the text and their complete amount
+                        if singlew.isnumeric():
+                            numberamount += 1
+                            listnumbs.append(int(singlew))
+                    print(f"There are {numberamount} numeric strings.")
+                    print(f"There are {lowerlt} lowercase words.")
+                    print(f"There are {titlelt} titlecase words.")
+                    print(f"There are {upperlt} uppercase words.")
+                    print("The sum of all the numbers ", sum(listnumbs), "\n", underln, "\n", "LEN|      OCCURENCES      |NR.", "\n", underln)
+                    
+                    #graphical visualization of the literal amounts- word lengths 
+                    graphics = []
+                    for wdleng in textdivision:
+                        graphics.append(len(wdleng))
+                    for setnr in set(graphics):
+                        print(f"{setnr:>2}| {'*'*graphics.count(setnr):25}|{str(graphics.count(setnr)).lstrip()}")
+                    time.sleep(5)
+                    break
                 else:
-                    print("Daný text není dostupný. Program bude ukončen.")
+                    print("Such a requested piece of text is not available. The program will be closed.")
                     time.sleep(3)
+                    break
             else:
-                print("Zadejte celé číslo 1-3")
+                print("Provide a number 1, 2 or 3")
                 time.sleep(3)
-            break
+                break
         else:
-            print(f"username:{username}\npassword:{heslovicko}\nunregistered user, terminating the program..")
+            print(f"username:{username}\npassword:{passwd}\nunregistered user, terminating the program..")
             time.sleep(3)
             break
 else:
-    heslovicko = input("Zadejte prosím Vaše heslo:")
-    print(f"username:{username}\npassword:{heslovicko}\nunregistered user, terminating the program..")
-    time.sleep(3)
+    passwd = input("Please provide your password:")
+    print(f"username:{username}\npassword:{passwd}\nUnregistered user, terminating the program..")
+    time.sleep(3)            
+exit
